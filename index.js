@@ -2,14 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000; // ✅ Use Render's port
+
 app.use(cors());
-
-
-// Middleware to parse JSON request body
 app.use(express.json());
 
-// Function to categorize data into numbers, alphabets, and highest alphabet
+// Function to categorize data
 function categorizeData(data) {
     let numbers = [];
     let alphabets = [];
@@ -22,14 +20,9 @@ function categorizeData(data) {
         }
     });
 
-    // Find highest alphabet (lexicographically)
     let highest_alphabet = alphabets.length > 0 ? [alphabets.sort((a, b) => a.localeCompare(b)).pop()] : [];
 
-    return {
-        numbers: numbers,
-        alphabets: alphabets,
-        highest_alphabet: highest_alphabet
-    };
+    return { numbers, alphabets, highest_alphabet };
 }
 
 // POST endpoint: /bfhl
@@ -44,9 +37,9 @@ app.post('/bfhl', (req, res) => {
 
     res.json({
         is_success: true,
-        user_id: "purnima_08032005",  // Replace with your details
+        user_id: "purnima_08032005",
         email: "purnimay2005@gmail.com",
-        roll_number: "22BCS12030",    // Replace with your roll number
+        roll_number: "22BCS12030",
         numbers,
         alphabets,
         highest_alphabet
@@ -58,16 +51,12 @@ app.get('/bfhl', (req, res) => {
     res.status(200).json({ operation_code: 1 });
 });
 
+// Root endpoint
 app.get('/', (req, res) => {
-    res.send('Backend is running ');
-  });
-  
+    res.send('Backend is running');
+});
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-
-
-
-
